@@ -1,0 +1,28 @@
+services:
+  db:
+    container_name: footballscout_db
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: dariuslucas
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: footballscout_db
+      PGDATA: /data/postgres
+    volumes:
+      - footballscout_data:/data/postgres
+    ports:
+      - "5332:5432"
+    networks:
+      - footballscout_net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dariuslucas -d footballscout_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  footballscout_net:
+    driver: bridge
+
+volumes:
+  footballscout_data:
