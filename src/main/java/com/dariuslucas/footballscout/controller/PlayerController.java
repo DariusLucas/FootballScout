@@ -44,4 +44,17 @@ public class PlayerController {
         }
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<?> updatePlayerById(
+            @PathVariable Integer id,
+            @RequestBody Player player
+    ) {
+        try {
+            PlayerResponse updated = playerService.updatePlayer(id, player);
+            return ResponseEntity.ok(updated);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
