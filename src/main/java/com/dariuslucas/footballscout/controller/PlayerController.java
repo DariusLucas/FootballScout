@@ -1,7 +1,10 @@
 package com.dariuslucas.footballscout.controller;
 
+import com.dariuslucas.footballscout.domain.Player;
 import com.dariuslucas.footballscout.dto.response.PlayerResponse;
 import com.dariuslucas.footballscout.service.PlayerService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,4 +23,25 @@ public class PlayerController {
     public List<PlayerResponse> getPlayers() {
         return playerService.getPlayers();
     }
+
+    @GetMapping("{id}")
+        public ResponseEntity<?> getPlayerById(@PathVariable Integer id) {
+        try {
+            PlayerResponse getById = playerService.getPlayerById(id);
+            return new ResponseEntity<>(getById, HttpStatus.OK);
+        } catch(IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<?> createPlayer(@RequestBody Player player) {
+        try {
+            PlayerResponse created = playerService.addPlayer(player);
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
