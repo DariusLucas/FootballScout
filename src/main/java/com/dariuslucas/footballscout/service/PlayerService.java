@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
 public class PlayerService {
 
@@ -115,5 +116,10 @@ public class PlayerService {
         );
     }
 
-
+    @Transactional
+    public void deletePlayer(Integer id) {
+        Player player = playerRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Player with id " + id + " not found"));
+        playerRepository.delete(player);
+    }
 }

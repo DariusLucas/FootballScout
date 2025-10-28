@@ -57,4 +57,14 @@ public class PlayerController {
         }
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deletePlayer(@PathVariable Integer id) {
+        try {
+            playerService.deletePlayer(id);
+            return ResponseEntity.ok().body("Player with id " + id + " has been deleted");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
