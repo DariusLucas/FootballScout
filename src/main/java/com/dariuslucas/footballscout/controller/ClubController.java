@@ -1,7 +1,9 @@
 package com.dariuslucas.footballscout.controller;
 
+import com.dariuslucas.footballscout.domain.Club;
 import com.dariuslucas.footballscout.dto.response.ClubResponse;
 import com.dariuslucas.footballscout.service.ClubService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,5 +33,15 @@ public class ClubController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
+    }
+
+    @PostMapping
+    public ResponseEntity<?> addClub(@RequestBody Club club) {
+        try {
+            ClubResponse created = clubService.addClub(club);
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        } catch  (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
