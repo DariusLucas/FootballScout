@@ -2,6 +2,7 @@ package com.dariuslucas.footballscout.controller;
 
 import com.dariuslucas.footballscout.dto.response.ClubResponse;
 import com.dariuslucas.footballscout.service.ClubService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,5 +20,16 @@ public class ClubController {
     @GetMapping
     public List<ClubResponse> getClubs() {
         return clubService.getClubs();
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<?> getClubByID(@PathVariable Integer id) {
+        try {
+            ClubResponse getById = clubService.getClubById(id);
+            return ResponseEntity.ok(getById);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 }

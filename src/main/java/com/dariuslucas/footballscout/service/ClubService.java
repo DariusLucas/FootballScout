@@ -16,6 +16,9 @@ public class ClubService {
         this.clubRepository = clubRepository;
     }
 
+
+
+
     public List<ClubResponse> getClubs() {
         return clubRepository.findAll().stream()
                 .map(c -> new ClubResponse(
@@ -33,4 +36,21 @@ public class ClubService {
                 ))
                 .toList();
     }
+
+    public ClubResponse getClubById(Integer id) {
+        return clubRepository.findById(id)
+                        .map(c -> new ClubResponse(
+                        c.getId(),
+                        c.getClubName(),
+                        c.getCountry(),
+                        c.getPlayers().stream()
+                                .map(p -> new PlayerSummary(
+                                        p.getId(),
+                                        p.getName(),
+                                        p.getShirtNumber(),
+                                        p.getNationality()
+                                )).toList()
+                )).orElseThrow(() -> new IllegalArgumentException("Invalid club id " + id));
+    }
+
 }
